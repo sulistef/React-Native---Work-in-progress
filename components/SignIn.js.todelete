@@ -1,0 +1,166 @@
+import React from "react";
+import {
+	Text,
+	View,
+	TextInput,
+	Button,
+	StyleSheet,
+	Image,
+	TouchableOpacity
+} from "react-native";
+import {
+	getProfileFromApi,
+	AuthorizeProfileFromApi
+} from "../services/api/imgurApi";
+
+class SignIn extends React.Component {
+	static navigationOptions = {
+		title: "Welcome"
+	};
+
+	state = { username: "" };
+
+	constructor() {
+		super();
+
+		this.onSignIn = this.onSignIn.bind(this);
+		this.onTextboxChangeUsername = this.onTextboxChangeUsername.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+	}
+
+	onTextboxChangeUsername(event) {
+		console.error(event.target.value);
+		this.setState({ username: event.target.value });
+	}
+
+	handleChange(event = {}) {
+		const value = event.target.value;
+		this.setState({ username: value });
+		// console.error(event.target.value);
+	}
+
+	async onSignIn() {
+		if (this.state.username) {
+			// const userDetails = await getProfileFromApi(this.state.username);
+			const userDetails = await AuthorizeProfileFromApi();
+			console.error(userDetails);
+			// var myHeaders = new Headers();
+			// myHeaders.append("Authorization", "Client-ID bb39ba8fc00a197");
+
+			// var formdata = new FormData();
+
+			// var requestOptions = {
+			// 	method: "GET",
+			// 	headers: myHeaders,
+			// 	redirect: "follow"
+			// };
+
+			// fetch(
+			// 	"https://api.imgur.com/3/account/" + this.state.username,
+			// 	requestOptions
+			// )
+			// 	.then(response => response.json())
+			// 	.then(result => console.error(result.success))
+			// 	.catch(error => console.error("error", error));
+		}
+	}
+
+	render() {
+		const { navigate } = this.props.navigation;
+		return (
+			<View style={styles.splashscr}>
+				<View style={styles.box}>
+					<Text style={styles.splashtit}>ePicture</Text>
+					<Image
+						style={{ width: 200, height: 72 }}
+						source={require("../assets/images/imgurlogo.png")}
+					/>
+					<TextInput
+						style={styles.inputs}
+						name="username"
+						onChangeText={value =>
+							this.setState({ username: value })
+						}
+						value={this.state.username}
+					/>
+					{/* <TextInput
+						style={styles.inputs}
+						name="password"
+						placeholder="Password ..."
+						secureTextEntry={true}
+					/> */}
+					<Button
+						style={styles.button}
+						onPress={this.onSignIn}
+						title="Sign In"
+					/>
+				</View>
+				<View style={styles.boxx}>
+					{/* <Text style={styles.signtxt}>Don't have an account ?</Text>
+					<Button title="Sign up" style={styles.Button} /> */}
+				</View>
+			</View>
+		);
+	}
+}
+
+const styles = StyleSheet.create({
+	splashscr: {
+		flex: 1,
+		color: "#fff",
+		backgroundColor: "#5cc9f5",
+		alignItems: "center",
+		justifyContent: "center"
+	},
+	splashbox1: {
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center"
+	},
+	splashbox2: {
+		flex: 2,
+		alignItems: "center",
+		justifyContent: "center"
+	},
+	signtxt: {
+		marginTop: 150,
+		color: "#037bfb",
+		fontSize: 20
+	},
+	signtit: {
+		color: "#037bfb",
+		fontSize: 30,
+		marginBottom: 30
+	},
+	splashbtn: { marginTop: 150 },
+	inputs: {
+		padding: 5,
+		backgroundColor: "#c1d6e5",
+		marginTop: 10,
+		borderRadius: 5,
+		width: 250
+	},
+	button: {},
+	splashtxt: {
+		marginTop: 150,
+		color: "#fff",
+		fontSize: 20
+	},
+	splashtit: {
+		marginTop: 80,
+		color: "#037bfb",
+		fontSize: 50
+	},
+	box: {
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center"
+	},
+	boxx: {
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center"
+	}
+});
+
+export default SignIn;
