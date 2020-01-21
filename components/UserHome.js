@@ -1,49 +1,38 @@
 import React from "react";
 import { Text, View, TextInput, Button, StyleSheet } from "react-native";
+import HomeGreets from "./HomeGreets";
+import HomeSearch from "./HomeSearch";
+import HomeMyPics from "./HomeMyPics";
+import styl from "../styles/styles";
 
-class UserHome extends React.Component {
-	static navigationOptions = {
-		title: "UserHome"
-	};
+var navigationOptions = {
+	title: "UserHome"
+};
 
-	render() {
-		const { navigate } = this.props.navigation;
-		return (
-			<View style={styles.splashscr}>
-				<Text style={styles.splashtxt}>Welcome Home</Text>
-			</View>
-		);
-	}
-}
+const UserHome = ({ userId, userName, accessToken }) => (
+	<View style={{ backgroundColor: "##5cc9f5", flex: 1 }}>
+		<View style={{ height: 100 }}>
+			<HomeGreets
+				userName={userName.userName}
+				userId={userId.userId}
+				accessToken={accessToken.accessToken}
+			/>
+		</View>
+		<View style={{ height: 70 }}>
+			<HomeSearch />
+		</View>
 
-const styles = StyleSheet.create({
-	splashscr: {
-		flex: 1,
-		color: "#fff",
-		backgroundColor: "#5cc9f5",
-		alignItems: "center",
-		justifyContent: "center"
-	},
-	splashbox1: {
-		flex: 1,
-		alignItems: "center",
-		justifyContent: "center"
-	},
-	splashbox2: {
-		flex: 2,
-		alignItems: "center",
-		justifyContent: "center"
-	},
-	splashtxt: {
-		marginTop: 150,
-		color: "#fff",
-		fontSize: 20
-	},
-	splashtit: {
-		color: "#037bfb",
-		fontSize: 70
-	},
-	splashbtn: { marginTop: 150 }
-});
+		<View style={{ flex: 4, backgroundColor: "#5cc9f5" }}>
+			<HomeMyPics
+				userName={userName.userName}
+				userId={userId.userId}
+				accessToken={accessToken.accessToken}
+			/>
+		</View>
+		{/* {console.log("props", props)} */}
+	</View>
+);
+
+const styles = StyleSheet.create(styl);
 
 export default UserHome;
