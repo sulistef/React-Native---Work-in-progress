@@ -8,7 +8,7 @@ import {
 import MainTabNavigator from "./MainTabNavigator";
 import Splash from "../components/Splash";
 import imgurLogin from "../components/imgurLogin";
-import UserHome from "../services/containers/home";
+import UserHome from "../components/UserHome";
 
 export default createAppContainer(
 	createSwitchNavigator({

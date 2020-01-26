@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { CLIENT_ID } from "../constants/consts";
 import { Button, View, Text, StyleSheet } from "react-native";
 import { WebView } from "react-native-webview";
-import { connect } from "react-redux";
+import UserHome from "./UserHome";
+// import { connect } from "react-redux";
 // import {
 // 	addAccessToken,
 // 	addUserName,
@@ -14,7 +15,7 @@ class imgurLogin extends Component {
 		title: "imgurLogin"
 	};
 
-	state = { accessToken: "", userId: "", userName: "", refresh: "" };
+	state = { accessToken: "", userId: "", userName: "", identified: false };
 
 	// listen to the webview page change to detect the Auth token
 	_onNavigationStateChange(webViewState) {
@@ -33,30 +34,37 @@ class imgurLogin extends Component {
 			);
 			const userId = this.paramsGetAccessToken(url, "account_id=");
 
-			//update redux store
-			this.props.dispatch({ type: "SET_USERID", userId });
-			this.props.dispatch({ type: "SET_USERNAME", userName });
-			this.props.dispatch({ type: "SET_ACCESSTOKEN", accessToken });
-			// this.addUserId(userId);
-			// this.addUserName(userName);
-			// this.addAccessToken(accessToken);
-
 			//debug
 			// console.log("accessToken", accessToken);
 			// console.log("userName", userName);
 			// console.log("userId", userId);
 
-			if (userId !== "") {
-				const { navigate } = this.props.navigation;
-				navigate("UserHome");
-			}
+			this.setState(
+				{
+					accessToken: accessToken,
+					userName: userName,
+					userId: userId
+				},
+				() => {
+					console.log("USER IDENTIFIED");
+					console.log("---------------------------");
+					console.log("userId: ", this.state.userId);
+					console.log("userName: ", this.state.userName);
+					console.log("accessToken: ", this.state.accessToken);
+					console.log("---------------------------");
+
+					if (userId !== "") {
+						const { navigate } = this.props.navigation;
+						navigate("UserHome", {
+							userId: this.state.userId,
+							userName: this.state.userName,
+							accessToken: this.state.accessToken
+						});
+					}
+				}
+			);
 
 			// set state to refresh and display the navigate button if auto-navigate didn't work
-			this.setState({
-				accessToken: accessToken,
-				userName: userName,
-				userId: userId
-			});
 		}
 	}
 
@@ -146,4 +154,4 @@ const styles = StyleSheet.create({
 	splashbtn: { marginTop: 150 }
 });
 
-export default connect()(imgurLogin);
+export default imgurLogin;

@@ -1,26 +1,68 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { getUserImages } from "../services/api/imgurApi";
+import { getUserImages, searchImgur } from "../services/api/imgurApi";
 import Loader from "./Loader";
 import ImageTile from "./ImageTile";
 import AddImage from "./AddImage";
 
 class HomeMyPics extends Component {
-	state = { pics: "", isLoading: true };
+	state = {
+		pics: "",
+		isLoading: true,
+		searchType: this.props.searchType,
+		toggler: true
+	};
 
 	constructor(props) {
 		super(props);
-
-		this.getMyPics();
+		this.getMyPics = this.getMyPics.bind(this);
+		this.searchImages = this.searchImages.bind(this);
 	}
 
+	componentDidMount() {
+		if (this.state.searchType === "user") {
+			this.getMyPics();
+		} else {
+			this.searchImages(this.state.searchType);
+		}
+	}
+
+	// static async getDerivedStateFromProps(props, state) {
+	// 	state.searchType = props.searchType;
+
+	// 	if (props.searchType === "user") {
+	// 		getUserImages(props.userName).then(res => {
+	// 			state.pics = res.data;
+	// 			state.isLoading = false;
+	// 		});
+	// 	} else {
+	// 		searchImgur(props.searchType).then(res => {
+	// 			state.pics = res.data;
+	// 			state.isLoading = false;
+	// 		});
+	// 	}
+
+	// 	return state;
+	// }
+
 	async getMyPics() {
+		this.setState({ isLoading: true });
+
 		const myPics = await getUserImages(this.props.userName);
-		console.log(myPics);
+		// console.log(myPics);
 
 		if (myPics.success) {
-			this.setState({ pics: myPics.data });
-			this.setState({ isLoading: false });
+			this.setState({ pics: myPics.data, isLoading: false });
+		}
+	}
+
+	async searchImages(_param) {
+		this.setState({ isLoading: true });
+		const myPics = await searchImgur(_param);
+		// console.log(myPics);
+
+		if (myPics.success) {
+			this.setState({ pics: myPics.data, isLoading: false });
 		}
 	}
 
@@ -30,6 +72,24 @@ class HomeMyPics extends Component {
 		} else {
 			return (
 				<View style={{ flex: 1 }}>
+					<View
+						style={{
+							width: "100%",
+							alignItems: "center",
+							padding: 5
+						}}
+					>
+						<Text
+							style={{
+								fontSize: 16,
+								color: "steelblue"
+							}}
+						>
+							{this.state.searchType !== "user"
+								? "Search results for: " + this.state.searchType
+								: "My images"}
+						</Text>
+					</View>
 					<ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
 						{this.state.pics.map(pic => {
 							if (pic.is_album) {

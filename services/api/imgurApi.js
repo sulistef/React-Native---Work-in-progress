@@ -102,7 +102,7 @@ export function searchImgur(_param) {
 	};
 
 	return fetch(
-		"https://api.imgur.com/3/gallery/viral/top/1/search?q=" + _param,
+		"https://api.imgur.com/3/gallery/search?q=" + _param,
 		requestOptions
 	)
 		.then(response => response.json())

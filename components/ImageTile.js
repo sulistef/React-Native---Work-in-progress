@@ -12,7 +12,14 @@ import { toggleFavorite } from "../services/api/imgurApi";
 import Loader from "./Loader";
 
 class ImageTile extends Component {
-	state = { isLoading: true, hauteur: 0 };
+	state = {
+		isLoading: true,
+		hauteur: 0,
+		imageKey: this.props.imageKey,
+		imageTitle: this.props.imageTitle,
+		imageSource: this.props.imageSource,
+		imageDesc: this.props.imageDesc
+	};
 
 	constructor(props) {
 		super(props);
@@ -22,28 +29,47 @@ class ImageTile extends Component {
 	componentDidMount() {
 		this.setState({ isLoading: false });
 
+		//define size of the picture depending on screen size
 		const win = Dimensions.get("window");
+
+		// define scale factor
 		const facteur =
 			Math.round((win.width / this.props.imageWidth) * 100) / 100;
 
+		// apply scale factor
 		if (facteur === NaN || this.props.imageHeight === undefined) {
 			this.setState({ hauteur: 100 });
 		} else {
 			const haut = Math.round(facteur * parseInt(this.props.imageHeight));
 			this.setState({ hauteur: haut });
 		}
-
-		// console.log("image ID ", this.props.imageKey);
-		// console.log("Access Token ", this.props.accessToken);
 	}
+
+	// static getDerivedStateFromProps(props, state) {
+	// 	state.imageKey = props.imageKey;
+	// 	state.imageTitle = props.imageTitle;
+	// 	state.imageSource = props.imageSource;
+	// 	state.imageDesc = props.imageDesc;
+
+	// 	return state;
+	// }
 
 	async toggleFav(_id) {
 		this.setState({ isLoading: true });
-		const toog = await toggleFavorite(_id, this.props.accessToken);
 
-		if (toog.success) {
-			console.log("Toggle " + _id + " - " + toog.data);
+		try {
+			// call the favorite function in API file
+			const toog = await toggleFavorite(_id, this.props.accessToken);
+			// console.log("id: ", _id);
+			// console.log(this.props.accessToken);
+			if (toog.success) {
+				// debug message
+				console.log("Toggle " + _id + " - " + toog.data);
+			}
+		} catch (error) {
+			console.log(error);
 		}
+
 		this.setState({ isLoading: false });
 	}
 
@@ -52,7 +78,7 @@ class ImageTile extends Component {
 			return <Loader />;
 		} else {
 			return (
-				<View style={styles.container} key={this.props.imageKey}>
+				<View style={styles.container} key={this.state.imageKey}>
 					<View
 						style={{
 							flexDirection: "row",
@@ -61,10 +87,10 @@ class ImageTile extends Component {
 						}}
 					>
 						<Text style={styles.imageTitle}>
-							{this.props.imageTitle}
+							{this.state.imageTitle}
 						</Text>
 						<TouchableOpacity
-							onPress={() => this.toggleFav(this.props.imageKey)}
+							onPress={() => this.toggleFav(this.state.imageKey)}
 							style={styles.coeur}
 						>
 							<Icon
@@ -81,7 +107,7 @@ class ImageTile extends Component {
 					</View>
 					{/* <Text>{this.props.imageSource}</Text> */}
 					<Image
-						source={{ uri: this.props.imageSource }}
+						source={{ uri: this.state.imageSource }}
 						style={{
 							// width: 375,
 							width: "100%",
@@ -90,7 +116,7 @@ class ImageTile extends Component {
 							borderRadius: 0
 						}}
 					/>
-					<Text style={styles.imageDesc}>{this.props.imageDesc}</Text>
+					<Text style={styles.imageDesc}>{this.state.imageDesc}</Text>
 				</View>
 			);
 		}

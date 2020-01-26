@@ -2,37 +2,46 @@ import React from "react";
 import { Text, View, TextInput, Button, StyleSheet } from "react-native";
 import HomeGreets from "./HomeGreets";
 import HomeSearch from "./HomeSearch";
-import HomeMyPics from "./HomeMyPics";
 import styl from "../styles/styles";
 
 var navigationOptions = {
 	title: "UserHome"
 };
 
-const UserHome = ({ userId, userName, accessToken }) => (
-	<View style={{ backgroundColor: "##5cc9f5", flex: 1 }}>
-		<View style={{ height: 100 }}>
-			<HomeGreets
-				userName={userName.userName}
-				userId={userId.userId}
-				accessToken={accessToken.accessToken}
-			/>
-		</View>
-		<View style={{ height: 70 }}>
-			<HomeSearch />
-		</View>
+class UserHome extends React.Component {
+	state = {
+		userId: this.props.navigation.state.params.userId,
+		userName: this.props.navigation.state.params.userName,
+		accessToken: this.props.navigation.state.params.accessToken
+	};
 
-		<View style={{ flex: 4, backgroundColor: "#5cc9f5" }}>
-			<HomeMyPics
-				userName={userName.userName}
-				userId={userId.userId}
-				accessToken={accessToken.accessToken}
-			/>
-		</View>
-		{/* {console.log("props", props)} */}
-	</View>
-);
+	constructor(props) {
+		super(props);
+	}
 
-const styles = StyleSheet.create(styl);
+	// ({ userId, userName, accessToken }) => {
+
+	render() {
+		return (
+			<View style={{ backgroundColor: "##5cc9f5", flex: 1 }}>
+				<View style={{ height: 100 }}>
+					<HomeGreets
+						userName={this.state.userName}
+						userId={this.state.userId}
+						accessToken={this.state.accessToken}
+					/>
+				</View>
+				<View style={{ flex: 1, backgroundColor: "#fff" }}>
+					<HomeSearch
+						userName={this.state.userName}
+						userId={this.state.userId}
+						accessToken={this.state.accessToken}
+						searchType={"user"}
+					/>
+				</View>
+			</View>
+		);
+	}
+}
 
 export default UserHome;

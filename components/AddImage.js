@@ -1,10 +1,26 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+// import ImagePicker from "react-native-image-picker";
 
 class AddImage extends Component {
+	constructor(props) {
+		super(props);
+		this.choosePhoto = this.choosePhoto.bind(this);
+	}
+
+	choosePhoto = () => {
+		// const options = {};
+		// ImagePicker.launchImageLibrary(options, response => {
+		// 	console.log("response", response);
+		// });
+	};
+
 	render() {
 		return (
-			<TouchableOpacity style={styles.container}>
+			<TouchableOpacity
+				style={styles.container}
+				onPress={this.choosePhoto}
+			>
 				<View>
 					<Text style={styles.bouton}>+</Text>
 				</View>
