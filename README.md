@@ -1,4 +1,4 @@
-# React Native App
+# imGur React Native App
 
 Application mobile permettant d'accéder à un compte Imgur.
 
